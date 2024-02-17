@@ -1,0 +1,63 @@
+html, body {
+  height: 100%; /* This makes sure the root elements take the full viewport height */
+  margin: 0; /* Resets any default margin */
+  padding: 0; /* Resets any default padding */
+}
+.dashboard {
+  height: 100vh; /* This inherits the height from body which is set to 100% of the viewport */
+  display: flex; /* Using flex to ensure that the child elements can grow to fill the container */
+  flex-direction: column; /* Align children vertically */
+}
+
+.dashboardBody {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr; /* Three columns */
+    grid-template-rows: 1fr 2fr 1fr; /* Three rows */
+    gap: 10px;
+    height: 100%;
+    
+  }
+  
+.profileSection {
+    grid-row: 1;
+  grid-column: 3;
+    background-color: #ffffff; /* Light red */
+    /* Additional styling */
+  }
+  
+  .notificationsSection {
+    grid-row: 2;
+    grid-column: 3;
+    background-color: white; /* Light blue */
+    /* Additional styling */
+  }
+  
+  .supportFeedbackSection {
+    grid-row: 3;
+    grid-column: 3;
+    background-color: white; /* Light green */
+    /* Additional styling */
+  }
+  
+  .toolAccessSection {
+    grid-row: 2 / 4;
+    grid-column: 2;
+    
+    background-color: white; /* Light yellow */
+    /* Additional styling */
+  }
+  
+  .usagePaneSection {
+    grid-row: 1;
+    grid-column: 1/3;
+    background-color: white; /* Light orange */
+    /* Additional styling */
+  }
+  
+  .messageSection {
+    grid-row: 2/4;
+    grid-column: 1;
+    background-color: white; /* Light purple */
+    /* Additional styling */
+  }
+  
