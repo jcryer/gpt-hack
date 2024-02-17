@@ -1,7 +1,7 @@
 // Require the framework and instantiate it
-
-// CommonJs
-const fastify = require('fastify')({
+// ESM
+import Fastify from 'fastify'
+const fastify = Fastify({
   logger: true
 })
 
