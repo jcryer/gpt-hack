@@ -3,7 +3,7 @@ import './BottomRight.css'; // Make sure to create a corresponding CSS file for 
 import TableModal from './TableModal';
 import { downloadTSV } from '../utils/downloadUtils';
 import { createTableRows, parseTSV } from '../utils/tableUtils';
-import { useFileData } from '../context/FileDataContext';
+import { useOutgoing } from '../context/OutgoingContext';
 
 function BottomRight() {
   // Using placeholder data initially
@@ -13,15 +13,15 @@ function BottomRight() {
     { date: '2024-02-03', description: 'Item 3', total: '$300' },
   ];
 
-  const { tsvData } = useFileData();
+  const { outgoingData } = useOutgoing();
   const [data, setData] = useState(initialPlaceholderData);
 
   useEffect(() => {
-    if (tsvData && tsvData.success && typeof tsvData.tsv === 'string') {
-      const parsedData = parseTSV(tsvData.tsv);
+    if (outgoingData && outgoingData.success && typeof outgoingData.tsv === 'string') {
+      const parsedData = parseTSV(outgoingData.tsv);
       setData(parsedData);
     }
-  }, [tsvData]);
+  }, [outgoingData]);
 
   const [modalContent, setModalContent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +36,7 @@ function BottomRight() {
   };
 
   // Define columns for the table
-  const columns = ['date', 'description', 'total']; // Adjust columns as needed
+  const columns = ['date', 'description','category','to/from' ,'total']; // Adjust columns as needed
 
   const rowsToRender = createTableRows(data, handleCellClick, columns);
 
@@ -55,6 +55,8 @@ function BottomRight() {
             <tr>
               <th>Date</th>
               <th>Description</th>
+              <th>Category</th>
+              <th>To/From</th>
               <th>Total</th>
             </tr>
           </thead>
