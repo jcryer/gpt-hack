@@ -1,0 +1,54 @@
+/* TopLeft.css */
+
+
+  .tabPanelContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    max-height:100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    
+  }
+
+.dropzone {
+    border: 2px dashed #ccc;
+    padding: 10px;
+    width: 80%;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+    height:10%;
+    max-height:100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  
+  .fileList {
+    height:100%;
+   
+    width: 100%;
+    text-align: center;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #ccc;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  
+  .fileListItem {
+    justify-content: center;
+    
+  }
+  /* TopLeft.css */
+.fileList .MuiListItem-root {
+    padding: 0px 16px; /* Reduce the top and bottom padding as needed */
+    
+  }
+  
