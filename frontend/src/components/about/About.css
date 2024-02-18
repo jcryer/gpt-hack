@@ -1,0 +1,84 @@
+.about-container {
+    max-width: 95%;
+    margin: auto;
+    padding: 20px;
+    
+  }
+  
+  .about-container h1, .about-container h2 {
+    color: #2c3e50;
+  }
+  
+  .about-container p {
+    color: #34495e;
+    line-height: 1.6;
+  }
+  
+  .about-intro, .about-mission, .about-tools, .about-stage {
+    margin-bottom: 40px;
+  }
+  
+  .about-intro h1 {
+    font-size: 2rem; /* Smaller size for better mobile fit */
+    margin-bottom: 10px;
+  }
+  
+  .about-intro p {
+    font-size: 1rem;
+  }
+  
+  .about-mission h2, .about-tools h2, .about-stage h2 {
+    font-size: 1.5rem; /* Adjusted for smaller screens */
+    margin-bottom: 10px;
+  }
+  
+  .about-mission p, .about-tools p, .about-stage p {
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive Design for Tablets */
+  @media (min-width: 600px) {
+    .about-container {
+      max-width: 80%;
+    }
+  
+    .about-intro h1 {
+      font-size: 2.5rem;
+    }
+  
+    .about-mission h2, .about-tools h2, .about-stage h2 {
+      font-size: 2rem;
+    }
+  
+    .about-mission p, .about-tools p, .about-stage p {
+      font-size: 1rem;
+    }
+  }
+  
+  /* Responsive Design for Desktops */
+  @media (min-width: 1024px) {
+    .about-container {
+      max-width: 800px;
+    }
+  
+    .about-intro h1 {
+      font-size: 3rem;
+    }
+  
+    .about-mission h2, .about-tools h2, .about-stage h2 {
+      font-size: 2.5rem;
+    }
+  
+    .about-mission p, .about-tools p, .about-stage p {
+      font-size: 1.2rem;
+    }
+  }
+  
+  /* Initial state for animation */
+.animated-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+  }
+  

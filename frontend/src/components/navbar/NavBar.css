@@ -1,0 +1,61 @@
+nav {
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between; /* Space out brand and buttons */
+    align-items: center; /* Vertically center content */
+    font-size: x-large;
+    
+  }
+  
+  .navbar-brand {
+    font-size: 1.5em;
+    
+    
+    display: flex;
+    align-items: center;
+    
+  }
+  .text {
+    font-family: 'Roboto Mono', monospace; /* Adjust as needed */
+    color: #111;
+    font-variation-settings: "wght" var(--font-weight, 100);
+    font-size: 2rem; /* Adjust the size as needed */
+    margin-left: 1px;
+    margin-right: 1px;
+    
+  }
+  .navbar-buttons button {
+    background: none;
+    border: none;
+    margin: 0 10px;
+    padding: 10px 15px;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: black;
+    transition: color 0.3s ease, transform 0.3s ease;
+    font-family: 'Roboto Mono', monospace;
+  }
+  
+  .navbar-buttons button:hover {
+    color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .navbar-buttons {
+      margin-top: 10px;
+    }
+  
+    .navbar-buttons button {
+      font-size: 1em;
+      padding: 8px 12px;
+    }
+  }
+  

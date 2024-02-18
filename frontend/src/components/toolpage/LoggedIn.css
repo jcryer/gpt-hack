@@ -1,0 +1,23 @@
+/* LoggedIn.css */
+.body{
+  max-height: 100%;
+}
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 20% 80%; /* Adjusted to specify 30% height for the top row and 70% for the bottom row */
+  gap: 10px;
+  height: 96vh; /* Adjust based on your layout */
+
+}
+
+.quarter {
+  display: flex;
+  justify-content: center;
+  padding: 0px;
+
+  max-height: 100%;
+  overflow: hidden; /* Add this line */
+  width: 100%;
+}
+

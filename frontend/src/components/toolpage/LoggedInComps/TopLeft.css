@@ -1,0 +1,120 @@
+.component1 {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-between; /* This will space out the children */
+    height: 100%;
+    max-height: 85px;
+    min-height:85px
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 0 0 auto; /* Do not allow the button container to grow */
+    margin-bottom: 0px; /* Keep a margin from the separator */
+  }
+  
+  .tab-switcher {
+    display: flex;
+    align-items: center; /* Align buttons vertically */
+    
+  }
+  
+  .tab {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    outline: none;
+    border-radius: 5px; /* Optional for rounded corners */
+    
+  }
+  
+  .tab.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  
+  
+  .file-input-container {
+    position: relative; /* Keep this to position the file input absolutely inside */
+    display: flex; /* Use flex to allow children to expand */
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    flex-direction: column; /* Stack elements vertically */
+    
+    padding: 15px 0px 0px 0px;
+    margin-bottom: 20px;
+    height: 100%; /* Fill the available vertical space */
+  }
+  
+  
+  .file-input {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    
+  }
+  
+  .file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center content horizontally */
+    font-size: 1.1em;
+    text-align: center;
+    width: 80%;
+    cursor: pointer;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-height: 20px;
+    z-index: 2;
+  }
+  
+  .check-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .text-input-container {
+    display: flex;
+    justify-content: center; /* Centers the text input horizontally */
+    align-items: center; /* Centers the text input vertically if the container has a specific height */
+  }
+  
+  .text-input {
+    width: 80%; /* Adjust the width as needed */
+    height: 15px; /* Adjust the height as needed */
+    padding: 10px;
+    margin: 0px 0; /* Adds some space above and below the text input */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* Allows the user to resize the textarea vertically */
+  }
+
+  /* Add this new hover effect for all buttons including the file label */
+.tab:hover, .check-button:hover, .file-label:hover {
+    transform: scale(1.05); /* Slightly increase the size of the element */
+    transition: transform 0.2s; /* Smooth transition for the transform effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+.file-input:hover {
+    transform: none;
+  }

@@ -1,0 +1,52 @@
+.loggedOutContainer {
+  display: flex;
+  height: 100vh; /* Full view height to make sure it takes up the entire screen */
+}
+
+.backgroundSide {
+  width: 50%; /* Explicitly set widths to ensure division */
+  background-color: #2D2F33; /* Placeholder, replace this with your background image later */
+  position: relative;
+  background-image: url('/public/DALL·E 2024-02-17 14.32.26 - Create a series of pixel art images that are minimalistic, featuring a light blue background. The scene depicts a man being assisted by a robot in doi.webp'); /* Replace with your image path */
+  background-size: cover; /* Cover the entire area of the div without stretching the image */
+  background-position: center; /* Center the background image */
+}
+
+.formSide {
+  width: 50%; /* Explicitly set widths to ensure division */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: white; /* Explicitly setting the background to white */
+}
+
+.formContainer {
+  width: 50%; /* Use 100% of the formSide width */
+  max-width: 500px; /* Limiting the form width for larger screens */
+  margin: 0 auto; /* Centering in case flexbox fails */
+  
+  /* Using transform for an alternative centering method */
+  position: relative;
+  left: 25%;
+  transform: translateX(-50%);
+}
+
+
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  
+  
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Roboto', monospace; /* If using text */
+  font-size: 48px; /* Adjust as needed */
+  color: #949597; /* Adjust as needed */
+  z-index:99999;
+}

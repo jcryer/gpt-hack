@@ -1,0 +1,90 @@
+.component3 {
+    margin-top: 2px;
+    padding: 0px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  .component3-header {
+    display: flex;
+    justify-content: space-between; /* Space between title and buttons */
+    align-items: center; /* Align items vertically */
+    margin: 5px;
+  }
+  .component3 h3 {
+    text-align: left;
+    margin: 0px;
+    font-size: smaller;
+  }
+
+  
+  .component3-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .component3-buttons button {
+    padding: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s; /* Smooth transition for hover effect */
+  }
+  
+  .component3-buttons button:hover {
+    transform: scale(1.05); /* Slightly increase size on hover */
+  }
+  
+  .component3-table-container {
+    flex-grow: 1; 
+    overflow: auto;
+  }
+  
+  .component3-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  
+  .component3-table thead tr th,
+  .component3-table tfoot tr td {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 5px;
+    font-size: smaller;
+  }
+  
+  .component3-table tfoot tr td {
+    bottom: 0;
+  }
+  
+  .component3-table th,
+  .component3-table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+    font-size: smaller;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .component3-table td:hover {
+    background-color: #e2e2e2;
+  }
+  
+  .component3-table .yes-row {
+    background-color: rgba(0, 128, 0, 0.1); /* Light green tint */
+  }
+  
+  .component3-table .no-row {
+    background-color: rgba(255, 0, 0, 0.1); /* Light red tint */
+  }
