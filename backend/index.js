@@ -1,20 +1,21 @@
-// Require the framework and instantiate it
+import Fastify from 'fastify';
+import * as path from 'path';
+import * as st from '@fastify/static';
+import { fileURLToPath } from 'url';
 
-// CommonJs
-const fastify = require('fastify')({
-  logger: true
-})
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Declare a route
-fastify.get('/', function (request, reply) {
-  reply.send({ hello: 'world' })
-})
+const fastify = Fastify({ logger: true });
+fastify.register(st, {
+  root: path.join(__dirname, 'build'),
+  prefix: '/'
+});
 
-// Run the server!
+fastify.get('/test', function(req, res) {
+  return { hello: 'world' };
+});
+
 fastify.listen({ port: 3000 }, function (err, address) {
-  if (err) {
-    fastify.log.error(err)
-    process.exit(1)
-  }
-  // Server is now listening on ${address}
-})
+  if (err) fastify.log.error(err);
+});

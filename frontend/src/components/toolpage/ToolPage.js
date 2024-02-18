@@ -6,17 +6,14 @@ import LoggedOut from './LoggedOut';
 const ToolPage = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  const handleLogin = (log) => {
+    setIsLoggedIn(log);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
 
   return (
     <div class='main'>
-      {isLoggedIn ? <LoggedIn onLogout={handleLogout}/> : <LoggedOut onLogin={handleLogin} />}
+      {isLoggedIn ? <LoggedIn onLogout={() => handleLogin(false)}/> : <LoggedOut onLogin={() => handleLogin(true)} />}
     </div>
   );
 };
