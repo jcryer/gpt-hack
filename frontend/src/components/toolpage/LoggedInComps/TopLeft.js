@@ -1,102 +1,78 @@
-import React, { useState, useCallback } from 'react';
-import { Tab, Tabs, Box, Typography, Paper, List, ListItem, ListItemText } from '@mui/material';
-import { useDropzone } from 'react-dropzone';
-import './TopLeft.css'; // Ensure to update CSS as per the changes mentioned
+import React, { useState } from 'react';
+import './TopLeft.css'; // Make sure you create a corresponding CSS file
+import { uploadFiles } from '../utils/checkUtils';
+import { useFileData } from '../context/FileDataContext';
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+function TopLeft() {
+  const [activeTab, setActiveTab] = useState('Invoices');
+  const [files, setFiles] = useState([]); // Files for Invoices
+  const [statementsFiles, setStatementsFiles] = useState([]); // Files for Statements
+  const [text, setText] = useState('');
+  const { setTsvData } = useFileData();
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const handleFileChange = (event) => {
+    if (activeTab === 'Invoices') {
+      setFiles(event.target.files);
+    } else if (activeTab === 'Statements') {
+      setStatementsFiles(event.target.files); // Set files for statements
+    }
+  };
+
+  const handleTextChange = (event) => {
+    setText(event.target.value); // Update text state on change
+  };
+
+  const handleCheckClick = async () => {
+    if (!text.trim() && activeTab === 'Invoices' || (activeTab === 'Invoices' && files.length === 0) || (activeTab === 'Statements' && statementsFiles.length === 0)) {
+      alert("Please enter some requirement text and select files before proceeding.");
+      return;
+    }
+  
+    try {
+      const uploadFilesList = activeTab === 'Invoices' ? files : statementsFiles;
+      const result = await uploadFiles(uploadFilesList, text);
+      console.log(result);
+      setTsvData(result); // Store the TSV data in the context
+      alert('CV analysis complete!')
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 0, display:'flex',border: '1px solid red !important',flexDirection: 'column', overflow: 'hidden'}}> {/* Adjusted for scroll */}
-          <Typography component={'span'}>{children}</Typography>
-        </Box>
-      )}
+    <div className="component1">
+      <div className="button-container">
+        <div className="tab-switcher">
+          <button 
+            className={`tab ${activeTab === 'Invoices' ? 'active' : ''}`}
+            onClick={() => handleTabClick('Invoices')}
+          >
+            Invoices {files.length > 0 ? `(${files.length})` : ''}
+          </button>
+          <button 
+            className={`tab ${activeTab === 'Statements' ? 'active' : ''}`}
+            onClick={() => handleTabClick('Statements')}
+          >
+            Statements {statementsFiles.length > 0 ? `(${statementsFiles.length})` : ''}
+          </button>
+        </div>
+        <button className="check-button" onClick={handleCheckClick}>Reconcile!</button>
+      </div>
+      
+      {activeTab === 'Invoices' || activeTab === 'Statements' ? (
+        <div className="file-input-container">
+          <input type="file" id="file-upload" className="file-input" multiple onChange={handleFileChange} accept=".pdf" /> 
+          <label htmlFor="file-upload" className="file-label">
+            Choose Files {((activeTab === 'Invoices' && files.length > 0) || (activeTab === 'Statements' && statementsFiles.length > 0)) ? '✅' : ''}
+          </label>
+        </div>
+      ) : null}
     </div>
   );
 }
-
-const TopLeft = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const [bankStatements, setBankStatements] = useState([]);
-  const [invoices, setInvoices] = useState([]);
-
-  const onDrop = useCallback((acceptedFiles) => {
-    const files = acceptedFiles.map(file => ({
-      path: file.path,
-      name: file.name,
-      size: file.size,
-    }));
-
-    if (activeTab === 0) {
-      setBankStatements(prev => [...prev, ...files]);
-    } else {
-      setInvoices(prev => [...prev, ...files]);
-    }
-  }, [activeTab]);
-
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
-  const handleChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
-
-  const renderFileList = (files) => (
-    <List className="fileList" sx={{ maxHeight: '10vh', overflow: 'auto' }}> {/* Adjusted for scroll */}
-      {files.map((file, index) => (
-        <ListItem key={index}>
-          <ListItemText 
-            primary={file.name} 
-            secondary={`Size: ${file.size} bytes`} 
-            sx={{ 
-              '.MuiListItemText-primary': { fontSize: '0.5rem' }, // Adjusted for readability
-              '.MuiListItemText-secondary': { fontSize: '0.5rem' } // Adjusted for readability
-            }}
-          />
-        </ListItem>
-      ))}
-    </List>
-  );
-
-  return (
-    <div className='contentWrapper' style={{ maxHeight: '100%'}}> {/* Added style for containment */}
-    <Paper sx={{ width: '100%', maxHeight:'100%', height:'100%' }}> {/* Adjusted for scroll */}
-      <Tabs value={activeTab} onChange={handleChange} aria-label="file upload tabs">
-        <Tab label={`Bank Statements (${bankStatements.length})`} />
-        <Tab label={`Invoices (${invoices.length})`} />
-      </Tabs>
-
-      <TabPanel value={activeTab} index={0} style={{ maxHeight: '100%', overflow:'auto' }} >
-        <div className="tabPanelContent">
-          <div {...getRootProps()} className="dropzone" style={{maxHeight:'1vh', textAlign:'center'}}>
-            <p>Add Files</p>
-           <input {...getInputProps()} />
-            
-          </div>
-          
-          {renderFileList(bankStatements)}
-        </div>
-      </TabPanel>
-      <TabPanel value={activeTab} index={1}>
-        <div className="tabPanelContent">
-          <div {...getRootProps()} className="dropzone">
-            <input {...getInputProps()} />
-            <p>Add Files</p>
-          </div>
-          
-          {renderFileList(invoices)}
-        </div>
-      </TabPanel>
-    </Paper>
-    </div>
-  );
-};
 
 export default TopLeft;

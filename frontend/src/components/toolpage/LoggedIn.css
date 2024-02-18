@@ -1,17 +1,23 @@
 /* LoggedIn.css */
+.body{
+  max-height: 100%;
+}
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 30% 70%; /* Adjusted to specify 30% height for the top row and 70% for the bottom row */
+  grid-template-rows: 20% 80%; /* Adjusted to specify 30% height for the top row and 70% for the bottom row */
   gap: 10px;
-  height: 100vh; /* Adjust based on your layout */
+  height: 96vh; /* Adjust based on your layout */
+
 }
 
 .quarter {
   display: flex;
   justify-content: center;
-  align-items: center;
-  border: 1px solid #ccc; /* Just for visibility */
+  padding: 0px;
+
   max-height: 100%;
-  overflow: auto; /* Add this line */
+  overflow: hidden; /* Add this line */
+  width: 100%;
 }
+
