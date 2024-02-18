@@ -3,32 +3,30 @@ import * as fs from "fs";
 import { createWorker } from 'tesseract.js';
 import pdftopic from "pdftopic";
 
-async function pdfToBase64(filePath) {
-  const buffer = await fs.promises.readFile(filePath);
-  return await pdftopic.pdftobuffer(buffer, "all");
+async function pdfToImageBuffers(fileBuffer) {
+  return await pdftopic.pdftobuffer(fileBuffer, "all");
 }
 
-async function pdfToTextOcr(buffer) {
+async function pdfToBase64(fileBuffer) {
+  const res = await pdfToImageBuffers(fileBuffer);
+  return res.map(x => x.toString('base64'));
+}
+
+async function pdfToTextOcr(fileBuffer) {
   const worker = await createWorker('eng');
-  const pngPages = await pdftopic.pdftobuffer(buffer, "all");
+  const images = await pdfToImageBuffers(fileBuffer);
   let out = "";
 
-  for (const page of pngPages) {
-    const ret = await worker.recognize(page);
+  for (const image of images) {
+    const ret = await worker.recognize(image);
     out += `${ret.data.text} \r\n`;
   }
   await worker.terminate();
   return out;
 }
 
-async function imageToTextOcr(buffer) {
-  const worker = await createWorker('eng');
-  const ret = await worker.recognize(buffer);
-  return ret.data.text;
-}
-
 async function pdfToTextDirect(buffer) {
-  const pdf = await pdfjs.getDocument({data: buffer}).promise;
+  const pdf = await pdfjs.getDocument({data: buffer.buffer}).promise;
   let out = "";
 
   for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
@@ -50,4 +48,4 @@ async function pdfToTextDirect(buffer) {
   return out;
 }
 
-export { pdfToBase64, pdfToTextOcr, pdfToTextDirect, imageToTextOcr };
+export { pdfToBase64, pdfToTextOcr, pdfToTextDirect };
