@@ -15,6 +15,12 @@ async function pdfToTextOcr(buffer) {
   return out;
 }
 
+async function imageToTextOcr(buffer) {
+  const worker = await createWorker('eng');
+  const ret = await worker.recognize(buffer);
+  return ret.data.text;
+}
+
 async function pdfToTextDirect(buffer) {
   const pdf = await pdfjs.getDocument({data: buffer}).promise;
   let out = "";
@@ -38,4 +44,4 @@ async function pdfToTextDirect(buffer) {
   return out;
 }
 
-export { pdfToTextOcr, pdfToTextDirect };
+export { pdfToTextOcr, pdfToTextDirect, imageToTextOcr };
