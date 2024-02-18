@@ -1,9 +1,6 @@
 import * as fs from "fs";
-import OpenAI from 'openai';
 import { pdfToBase64 } from './pdf.js';
-const openai = new OpenAI({
-    apiKey: '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'
-  });
+
 async function parseInvoice(filePath) {
   const buffers = await pdfToBase64(filePath);
   console.log("Bank Data\n:", JSON.stringify(bankData));
