@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import './TopRight.css'; // Make sure the CSS file is updated accordingly
+import { useSettings } from '../context/SettingsContext';
 
 function TopRight() {
   const [activeTab, setActiveTab] = useState('Settings');
-  const [settingsText, setSettingsText] = useState(''); // For storing settings input
+  const { settings, setSettings } = useSettings();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   const handleSettingsTextChange = (event) => {
-    setSettingsText(event.target.value); // Update settings text state on change
+    setSettings(event.target.value); // Update shared settings text in context
   };
 
   // Functionality for handling actions on the Alerts tab can be added later
@@ -36,7 +37,7 @@ function TopRight() {
       
       {activeTab === 'Settings' ? (
         <div className="text-input-container">
-          <textarea id="settings-input" className="text-input" placeholder="Context here e.g. builder..." value={settingsText}
+          <textarea id="settings-input" className="text-input" placeholder="Context here e.g. builder..." value={settings}
             onChange={handleSettingsTextChange}></textarea>
         </div>
       ) : (

@@ -3,7 +3,7 @@ import './BottomLeft.css'; // Make sure to create a corresponding CSS file for t
 import TableModal from './TableModal';
 import { downloadTSV } from '../utils/downloadUtils';
 import { createTableRows, parseTSV } from '../utils/tableUtils';
-import { useFileData } from '../context/FileDataContext';
+import { useFileData } from '../context/IncomingContext';
 
 function BottomLeft() {
   // Using placeholder data initially
@@ -36,7 +36,7 @@ function BottomLeft() {
   };
 
   // Define columns for the table
-  const columns = ['date', 'description', 'total']; // Adjust columns as needed
+  const columns = ['date', 'description','category','to/from' ,'total']; // Adjust columns as needed
 
   const rowsToRender = createTableRows(data, handleCellClick, columns);
 
@@ -55,6 +55,8 @@ function BottomLeft() {
             <tr>
               <th>Date</th>
               <th>Description</th>
+              <th>Category</th>
+              <th>To/From</th>
               <th>Total</th>
             </tr>
           </thead>

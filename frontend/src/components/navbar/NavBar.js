@@ -10,15 +10,16 @@ const NavBar = ({currentPage, setCurrentPage}) => {
     return (
         <nav>
             <div className="navbar-brand">
-            <div className="text one">L</div>
-            <div className="text two">y</div>
-            <div className="text three">n</div>
-            <div className="text four">k</div>
-            <div className="text five">S</div>
-            <div className="text six">i</div>
-            <div className="text one">n</div>
-            <div className="text two">c</div>
-            
+            <div className="text one">R</div>
+            <div className="text two">e</div>
+            <div className="text three">c</div>
+            <div className="text four">o</div>
+            <div className="text five">n</div>
+            <div className="text six">c</div>
+            <div className="text seven">i</div>
+            <div className="text eight">l</div>
+            <div className="text nine">A</div>
+            <div className="text ten">i</div>
         </div>
             <div className="navbar-buttons">
                 <button onClick={() => setCurrentPage('ToolPage')}>ToolPage</button>
