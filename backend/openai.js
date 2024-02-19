@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import 'dotenv/config';
-import { defaultBankCallData } from './defaultData.js';
+import { defaultBankCallData, defaultReceiptData } from './defaultData.js';
 
 const openai = new OpenAI();
 
@@ -105,40 +105,6 @@ async function processBankStatement(csv) {
   return statement;
 }
 
-async function doPreprocessInvoiceRequest(img) {
-  return openai.chat.completions.create({
-    model: "gpt-4-vision-preview",
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text: "What's in this image?"
-          },
-          {
-            type: "image_url",
-            image_url: {
-              url: `data:image/jpeg;base64,${img}`
-            }
-          }
-        ]
-      },
-      {
-        role: "system",
-        content: "You are an accounting bot. you recieve visual documents and must return all the text and numbers written in the documents intelligibly"
-      }
-    ],
-    max_tokens: 300
-  });
-}
-
-async function preprocessInvoice(images) {
-  const promises = images.map(c => doPreprocessInvoiceRequest(c));
-  const promiseResults = await Promise.all(promises);
-  return promiseResults.map(x => x.choices[0].message.content).join('\n');
-}
-
 async function processInvoice(data) {
   const res = await openai.chat.completions.create({
     model: "gpt-4-1106-preview",
@@ -191,4 +157,61 @@ async function processInvoice(data) {
   return JSON.parse(res.choices[0].message.tool_calls[0].function.arguments);
 }
 
-export { processBankStatement, preprocessInvoice, processInvoice };
+async function testEmbedding() {
+  const strs = defaultBankCallData.map(x => `${x['totalAmount']} ${x['description']} ${x['toFrom']} ${x['category']} ${x['date']}`);
+  const statementRes = await openai.embeddings.create({
+    input: strs,
+    model: 'text-embedding-3-small',
+    timeout: 10
+  });
+  const statementEmbeddings = statementRes.data;
+
+  const rObj = defaultReceiptData[1];
+  const receipt = `${rObj['totalAmount']} ${rObj['description']} ${rObj['toFrom']} ${rObj['category']} ${rObj['date']}`;
+  console.log(receipt);
+
+  const receipt1Res = await openai.embeddings.create({
+    input: receipt,
+    model: 'text-embedding-3-small',
+    timeout: 10
+  });
+  const receiptEmbedding = receipt1Res.data;
+
+  let resIndex = -1;
+  let maxCos = -3;
+  for (let i = 0; i < statementEmbeddings.length; i++) {
+    const cosRes = cosineSimilarity(statementEmbeddings[i].embedding, receiptEmbedding[0].embedding);
+    if (cosRes > maxCos) {
+      maxCos = cosRes;
+      resIndex = i;
+    }
+  }
+  return { index: resIndex, cos: maxCos, res: strs[resIndex] };
+}
+
+function cosineSimilarity(vecA, vecB) {
+  let dotProduct = 0.0;
+  let normA = 0.0;
+  let normB = 0.0;
+
+  if (vecA.length !== vecB.length) {
+    throw new Error('Vectors are of different lengths');
+  }
+
+  for (let i = 0; i < vecA.length; i++) {
+    dotProduct += vecA[i] * vecB[i];
+    normA += vecA[i] ** 2;
+    normB += vecB[i] ** 2;
+  }
+
+  normA = Math.sqrt(normA);
+  normB = Math.sqrt(normB);
+
+  if (normA === 0 || normB === 0) {
+    throw new Error('One of the vectors is zero, cannot compute cosine similarity');
+  }
+
+  return dotProduct / (normA * normB);
+}
+
+export { processBankStatement, processInvoice, testEmbedding };

@@ -239,4 +239,24 @@ const defaultBankCallData = [
   }
 ];
 
-export { defaultBankCallData };
+
+const defaultReceiptData = [
+  {
+    "totalAmount": 1571.71,
+    "description": "RS Dedicated Server, Dedicated Server, Cisco ASA 5515 Firewall, PowerEdge R430 3.5\" Bay, PowerEdge R420 3.5\" Bay, and various configurations.",
+    "toFrom": "Telekinetix Limited",
+    "category": "IT and Hosting Services",
+    "date": "2023-01-01"
+  },
+  {
+    "totalAmount": 952.89,
+    "description": "Renewal of Partner Program Silver 2022 (FR21-906270310)",
+    "toFrom": "Telekinetix Limited",
+    "category": "Professional Services",
+    "date": "2022-01-24"
+  }
+];
+
+export { defaultBankCallData, defaultReceiptData };
+
+
