@@ -4,15 +4,17 @@ import TableModal from './TableModal';
 import { downloadTSV } from '../utils/downloadUtils';
 import { createTableRows, parseTSV } from '../utils/tableUtils';
 import { useFileData } from '../context/IncomingContext';
+import PDFModal from './PDFModal';
+
 
 function BottomLeft() {
   // Using placeholder data initially
   const initialPlaceholderData = [
-    { date: '2024-02-01', description: 'Item 1', total: '$100' },
-    { date: '2024-02-02', description: 'Item 2', total: '$200' },
-    { date: '2024-02-03', description: 'Item 3', total: '$300' },
+    { date: '2024-02-01', description: 'Item 1', category:'food',to_from:'kevin', total: '$100',doc:'../../../public/test.pdf' },
+    
   ];
-
+  const [pdfFilePath, setPdfFilePath] = useState('');
+  const [isPDFModalOpen, setIsPDFModalOpen] = useState(false);
   const { tsvData } = useFileData();
   const [data, setData] = useState(initialPlaceholderData);
 
@@ -26,17 +28,30 @@ function BottomLeft() {
   const [modalContent, setModalContent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCellClick = (content) => {
-    setModalContent(content);
-    setIsModalOpen(true);
+  const handleCellClick = (content, columnName) => {
+    if (columnName === 'doc') {
+      // Assuming content is the path to the PDF file or an identifier to retrieve it
+      console.log('tried to view pdf')
+      setPdfFilePath(content); // For now, directly setting the static file path
+      setIsPDFModalOpen(true);
+    } else {
+      // Handle other cell clicks as before
+      setModalContent(content);
+      setIsModalOpen(true);
+    
+    }
   };
+  const handleClosePDFModal = () => {
+    setIsPDFModalOpen(false);
+  };
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
   // Define columns for the table
-  const columns = ['date', 'description','category','to/from' ,'total']; // Adjust columns as needed
+  const columns = ['date', 'description','category','to_from' ,'total','doc']; // Adjust columns as needed
 
   const rowsToRender = createTableRows(data, handleCellClick, columns);
 
@@ -58,6 +73,7 @@ function BottomLeft() {
               <th>Category</th>
               <th>To/From</th>
               <th>Total</th>
+              <th>Doc</th>
             </tr>
           </thead>
           <tfoot>
@@ -69,6 +85,11 @@ function BottomLeft() {
         </table>
       </div>
       <TableModal content={modalContent} isOpen={isModalOpen} onClose={handleCloseModal} />
+      <PDFModal
+        content={pdfFilePath}
+        isOpen={isPDFModalOpen}
+        onClose={handleClosePDFModal}
+      />
     </div>
   );
 }

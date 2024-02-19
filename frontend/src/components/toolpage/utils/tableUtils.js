@@ -8,7 +8,8 @@ export const createTableRows = (data, handleCellClick, columns, fillRows = 100) 
     return (
       <tr key={item.id || index} className={rowClassName}>
         {columns.map(column => (
-          <td key={column} onClick={() => handleCellClick(item[column])}>
+          // Pass both item[column] and column name to handleCellClick
+          <td key={column} onClick={() => handleCellClick(item[column], column)}>
             {item[column]}
           </td>
         ))}
