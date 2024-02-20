@@ -157,37 +157,171 @@ async function processInvoice(data) {
   return JSON.parse(res.choices[0].message.tool_calls[0].function.arguments);
 }
 
-async function testEmbedding() {
-  const strs = defaultBankCallData.map(x => `${x['totalAmount']} ${x['description']} ${x['toFrom']} ${x['category']} ${x['date']}`);
-  const statementRes = await openai.embeddings.create({
-    input: strs,
-    model: 'text-embedding-3-small',
-    timeout: 10
-  });
-  const statementEmbeddings = statementRes.data;
+ // const receipt1Res = await openai.embeddings.create({
+  //   input: receipt,
+  //   model: 'text-embedding-3-small',
+  //   timeout: 10
+  // });
+  // const receipt = `${rObj['totalAmount']} ${rObj['description']} ${rObj['toFrom']} ${rObj['category']} ${rObj['date']}`;
+  // console.log(receipt);
 
-  const rObj = defaultReceiptData[1];
-  const receipt = `${rObj['totalAmount']} ${rObj['description']} ${rObj['toFrom']} ${rObj['category']} ${rObj['date']}`;
-  console.log(receipt);
 
-  const receipt1Res = await openai.embeddings.create({
-    input: receipt,
-    model: 'text-embedding-3-small',
-    timeout: 10
-  });
-  const receiptEmbedding = receipt1Res.data;
 
-  let resIndex = -1;
-  let maxCos = -3;
-  for (let i = 0; i < statementEmbeddings.length; i++) {
-    const cosRes = cosineSimilarity(statementEmbeddings[i].embedding, receiptEmbedding[0].embedding);
-    if (cosRes > maxCos) {
-      maxCos = cosRes;
-      resIndex = i;
+async function reconcilai(statements=defaultBankCallData, invoices=defaultReceiptData) {
+  // Function to chunk statements array into smaller arrays of length 5
+  const chunkArray = (arr, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      chunks.push(arr.slice(i, i + chunkSize));
+    }
+    return chunks;
+  };
+
+  // Chunk statements into batches of 5
+  const statementBatches = chunkArray(statements, 5);
+
+  // Prepare batches for parallel processing with invoices
+  const tasks = invoices.map((invoice, index) => {
+    return statementBatches.map((batch) => {
+      const messages = [
+        {
+          role: "system",
+          content: "Return the id of the statement that matches the invoice in the following format: ID: 123. Note that matches will not be exact due to OCR numebrs dont have to match or dates or references, make informed guesses. answer n/a if none appear to match, desptite your best guess.",
+        },
+        {
+          role: "user",
+          content: JSON.stringify({ statements: batch, invoice: invoice }),
+        },
+      ];
+
+      return openai.chat.completions.create({
+        model: "gpt-4-1106-preview",
+        messages: messages,
+        max_tokens: 300,
+      });
+    });
+  }).flat();
+
+  // Execute all tasks in parallel
+  const results = await Promise.all(tasks);
+  console.log(results)
+  // Process results to find matches
+  const matches = results.map((result, index) => {
+  // Assuming the response is a text that includes an ID in a predictable format
+  const textResponse = result.choices[0].message.content
+  console.log(textResponse)
+  // Regex pattern to find "ID: <number>" and extract the number
+  const idPattern = /\d+/;
+  const match = textResponse.match(idPattern);
+
+  // Extract the ID from the regex match result, default to null if not found
+  const matchingStatementId = match ? parseInt(match[1], 10) : null;
+
+  return {
+    invoiceId: Math.floor(index / statementBatches.length),
+    statementId: matchingStatementId,
+  };
+});
+
+  // Return the ids of the matching statements and invoices
+  return matches;
+}
+
+
+
+
+
+
+
+  const normalizeAmount = (amount) => {
+    // Convert to string, remove the decimal point and leading zeros
+    return amount.toString().replace('.', '').replace(/^0+/, '');
+  };
+
+  
+  
+  async function matchInvoicesAndStatements(bankCallData = defaultBankCallData, receiptData = defaultReceiptData) {
+    // Step 1: Assign unique IDs and normalize amounts
+    const amountOccurrences = new Map();
+  
+    bankCallData.forEach((item, index) => {
+      item.id = index;
+      item.normalizedAmount = normalizeAmount(Math.abs(item.totalAmount));
+      amountOccurrences.set(item.normalizedAmount, (amountOccurrences.get(item.normalizedAmount) || 0) + 1);
+    });
+  
+    receiptData.forEach((item, index) => {
+      item.id = index;
+      item.normalizedAmount = normalizeAmount(Math.abs(item.totalAmount));
+      // We count occurrences only to identify uniqueness across both datasets
+      amountOccurrences.set(item.normalizedAmount, (amountOccurrences.get(item.normalizedAmount) || 0) + 1);
+    });
+  
+    // Prepare the result objects
+    const matches = [];
+    const unmatched = [];
+  
+    // Step 2: Attempt to match based on unique normalized amount first
+    // First, prepare for matching on unique normalized amounts
+const uniqueAmountsInReceipts = new Map();
+const uniqueAmountsInBankCalls = new Map();
+
+receiptData.forEach(invoice => {
+    uniqueAmountsInReceipts.set(invoice.normalizedAmount, (uniqueAmountsInReceipts.get(invoice.normalizedAmount) || 0) + 1);
+});
+
+bankCallData.forEach(statement => {
+    uniqueAmountsInBankCalls.set(statement.normalizedAmount, (uniqueAmountsInBankCalls.get(statement.normalizedAmount) || 0) + 1);
+});
+
+// Perform matching
+receiptData = receiptData.filter(invoice => {
+  let matchFound = false;
+
+  // First attempt: Match on unique normalized amounts alone
+  if (uniqueAmountsInReceipts.get(invoice.normalizedAmount) === 1 && uniqueAmountsInBankCalls.get(invoice.normalizedAmount) === 1) {
+    const matchIndex = bankCallData.findIndex(statement => statement.normalizedAmount === invoice.normalizedAmount);
+    if (matchIndex !== -1) {
+      matches.push({ statementId: bankCallData[matchIndex].id, invoiceId: invoice.id });
+      bankCallData.splice(matchIndex, 1); // Remove matched item from bankCallData
+      matchFound = true;
     }
   }
-  return { index: resIndex, cos: maxCos, res: strs[resIndex] };
-}
+
+  return !matchFound; // Keep unmatched for the second attempt
+});
+
+// Second attempt: Match on having the same date and monetary value
+let tempReceiptData = []; // To hold receipts that are still unmatched after the second attempt
+receiptData.forEach(invoice => {
+  const invoiceDate = new Date(invoice.date).getTime();
+  const matchIndex = bankCallData.findIndex(statement =>
+      statement.normalizedAmount === invoice.normalizedAmount &&
+      new Date(statement.date).getTime() === invoiceDate);
+
+  if (matchIndex !== -1) {
+    matches.push({ statementId: bankCallData[matchIndex].id, invoiceId: invoice.id });
+    // Do not immediately remove the matched item to allow for potential duplicates
+  } else {
+    tempReceiptData.push(invoice); // Keep unmatched for further analysis or processing
+  }
+});
+
+// Update receiptData with the truly unmatched
+receiptData = tempReceiptData;
+        
+
+
+
+
+      
+        // Return the results
+        return {
+          matched: matches,
+          unmatched: unmatched
+        };
+      }
+  
 
 function cosineSimilarity(vecA, vecB) {
   let dotProduct = 0.0;
@@ -214,4 +348,4 @@ function cosineSimilarity(vecA, vecB) {
   return dotProduct / (normA * normB);
 }
 
-export { processBankStatement, processInvoice, testEmbedding };
+export { processBankStatement, processInvoice, matchInvoicesAndStatements, reconcilai };

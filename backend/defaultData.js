@@ -1,5 +1,6 @@
 const defaultBankCallData = [
   {
+    
     "totalAmount": -3000,
     "description": "BILL PAYMENT VIA FASTER PAYMENT TO MR JD CRYER REFERENCE SALARYDIV, MANDATE NO 0115 BANK TRANSFER DEBIT",
     "toFrom": "MR JD CRYER",
@@ -253,8 +254,16 @@ const defaultReceiptData = [
     "description": "Renewal of Partner Program Silver 2022 (FR21-906270310)",
     "toFrom": "Telekinetix Limited",
     "category": "Professional Services",
-    "date": "2022-01-24"
+    "date": "2022-01-24",
+  },
+  {
+    "totalAmount": 2220,
+    "description": "reciept for payment faster",
+    "toFrom": "n/a",
+    "category": "Payment service",
+    "date": "2022-01-31"
   }
+  
 ];
 
 export { defaultBankCallData, defaultReceiptData };

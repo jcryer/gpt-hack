@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as st from '@fastify/static';
 import { fileURLToPath } from 'url';
 import fs from "fs";
-import { processBankStatement, processInvoice, testEmbedding } from './openai.js';
+import { processBankStatement, processInvoice, matchInvoicesAndStatements, reconcilai } from './openai.js';
 import { pdfToText } from './pdf.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,7 +40,7 @@ fastify.get('/invoiceOCR', async function(req, res) {
 });
 
 fastify.get('/test', async function(req, res) {
-  return JSON.stringify(await testEmbedding(), null, 2);
+  return JSON.stringify(await reconcilai(), null, 2);
 });
 
 fastify.listen({ port: 3000 }, function (err, address) {

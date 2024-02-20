@@ -45,3 +45,6 @@ const uploadFiles = async ({invoicesFiles, statementsFiles}, text) => {
 };
 
 export { uploadFiles };
+
+
+

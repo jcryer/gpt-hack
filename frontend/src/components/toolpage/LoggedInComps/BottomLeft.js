@@ -5,12 +5,12 @@ import { downloadTSV } from '../utils/downloadUtils';
 import { createTableRows, parseTSV } from '../utils/tableUtils';
 import { useFileData } from '../context/IncomingContext';
 import PDFModal from './PDFModal';
-
+import {sendPDFId} from '../utils/requestPDFUtils'
 
 function BottomLeft() {
   // Using placeholder data initially
   const initialPlaceholderData = [
-    { date: '2024-02-01', description: 'Item 1', category:'food',to_from:'kevin', total: '$100',doc:'../../../public/test.pdf' },
+    { date: '2024-02-01', description: 'Item 1', category:'food',to_from:'kevin', total: '$100',doc:'id1234' },
     
   ];
   const [pdfFilePath, setPdfFilePath] = useState('');
@@ -30,19 +30,23 @@ function BottomLeft() {
 
   const handleCellClick = (content, columnName) => {
     if (columnName === 'doc') {
-      // Assuming content is the path to the PDF file or an identifier to retrieve it
-      console.log('tried to view pdf')
-      setPdfFilePath(content); // For now, directly setting the static file path
-      setIsPDFModalOpen(true);
+      console.log('Tried to view PDF');
+      // Immediately-invoked async function to handle the promise
+      (async () => {
+        try {
+          const pdfUrlResponse = await sendPDFId(content);
+          setPdfFilePath(pdfUrlResponse); // Update with the URL from the response
+          setIsPDFModalOpen(true); // Show the PDF modal
+        } catch (error) {
+          console.error("Error fetching PDF:", error);
+          // Handle the error appropriately
+        }
+      })();
     } else {
-      // Handle other cell clicks as before
+      // Handle other cell clicks as usual
       setModalContent(content);
       setIsModalOpen(true);
-    
     }
-  };
-  const handleClosePDFModal = () => {
-    setIsPDFModalOpen(false);
   };
 
 
