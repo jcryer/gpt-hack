@@ -14,9 +14,9 @@ async function doBankStatementRequest(chunk) {
   return openai.chat.completions.create({
     model: "gpt-4-1106-preview",
     messages: [
-      { 
+      {
         role: "user",
-        content: `${chunk.join('\n')}` 
+        content: `${chunk.join('\n')}`
       },
       {
         role: "system",
