@@ -1,4 +1,3 @@
-import * as pdfjs from 'pdfjs-dist';
 import { createWorker } from 'tesseract.js';
 import pdftopic from "pdftopic";
 

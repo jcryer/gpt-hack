@@ -5,6 +5,13 @@ import { fileURLToPath } from 'url';
 import fs from "fs";
 import { processBankStatement, processInvoice, matchInvoicesAndStatements, reconcilai } from './openai.js';
 import { pdfToText } from './pdf.js';
+import { setup, createUser, createReceipt, createBankStatement } from './db.js';
+import { defaultBankCallData, defaultReceiptData } from './defaultData.js';
+
+(async () => {
+  await setup();
+  // const userId = await createUser("test");
+})();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,9 +25,11 @@ fastify.register(st, {
 // Reads in a local CSV file of bank statement, chunks it, sends each chunk to GPT in parallel, collates result
 // and returns standardised JSON representation of bank statement.
 fastify.get('/bankStatement', async function(req, res) {
-  const bankFilePath = "data/monzo.csv";
+  const bankFilePath = "data/CSV Jan 23.csv";
   const csv = await fs.promises.readFile(bankFilePath, { encoding: "utf-8" });
-  return JSON.stringify(await processBankStatement(csv), null, 2);
+  const processed = await processBankStatement(csv);
+  const bank = await createBankStatement(processed, 1); // Eventually pass userId
+  return JSON.stringify(processed, null, 2);
 });
 
 // Reads in a local PDF file of invoice, converts it to an image, runs OCR to get all text.
@@ -32,11 +41,14 @@ fastify.get('/preInvoiceOCR', async function(req, res) {
 
 // Reads in a local PDF file of invoice, converts it to an image, runs OCR to get all text.
 // Then sends that description to GPT and returns standardised JSON representation of receipt.
-fastify.get('/invoiceOCR', async function(req, res) {
+fastify.get('/invoice', async function(req, res) {
   const invoiceFilePath = "data/215908-Telekinetix Limited.pdf";
   const buffer = await fs.promises.readFile(invoiceFilePath);
   const desc = await pdfToText(buffer);
-  return JSON.stringify(await processInvoice(desc), null, 2);
+  const processed = await processInvoice(desc);
+  const receipt = await createReceipt(processed, 1, invoiceFilePath); // Eventually pass userId and original file path
+  // need to save file with name of `receipt`
+  return JSON.stringify(processed, null, 2);
 });
 
 fastify.get('/test', async function(req, res) {

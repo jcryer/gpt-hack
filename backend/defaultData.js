@@ -267,5 +267,3 @@ const defaultReceiptData = [
 ];
 
 export { defaultBankCallData, defaultReceiptData };
-
-

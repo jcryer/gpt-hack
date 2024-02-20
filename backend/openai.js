@@ -2,7 +2,15 @@ import OpenAI from 'openai';
 import 'dotenv/config';
 import { defaultBankCallData, defaultReceiptData } from './defaultData.js';
 
-const openai = new OpenAI();
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: "https://api.portkey.ai/v1",
+  defaultHeaders: {
+    "x-portkey-api-key": process.env.PORTKEY_API_KEY,
+    "x-portkey-provider": "openai",
+    "Content-Type": "application/json"
+  }
+});
 
 const chunkMaker = (arr, size) => arr.length > size ? [arr.slice(0, size), ...chunkMaker(arr.slice(size), size)] : [arr];
 

@@ -19,6 +19,8 @@
     "pdfjs-dist": "^4.0.379",
     "pdftopic": "^1.0.1-alpha",
     "portkey-ai": "^1.1.5",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "tesseract.js": "^5.0.4"
   },
   "type": "module"
