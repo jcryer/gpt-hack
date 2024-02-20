@@ -101,7 +101,7 @@ async function processBankStatement(csv) {
       ));
     }
   }
-  
+
   return statement;
 }
 
@@ -109,9 +109,9 @@ async function processInvoice(data) {
   const res = await openai.chat.completions.create({
     model: "gpt-4-1106-preview",
     messages: [
-      { 
+      {
         role: "user",
-        content: `${data}` 
+        content: `${data}`
       },
       {
         role: "system",
