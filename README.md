@@ -29,6 +29,6 @@ Enter **ReconcilAi**. Our app leverages large language models and natural langua
 
 Building ReconcilAi was made possible thanks to several key tools and the incredible community support:
 
-- **Trulens:** For evaluating our model's contextual retrieval abilities.
+- **Trulens:** For evaluating our model's contextual retrieval abilities. (https://colab.research.google.com/drive/1nj4Uqlj4k3hjJoR0VGoOWLTlVPOtX96_#scrollTo=kKCx8zplTJns)
 - **Portkey:** For aiding in rapid prompt prototyping.
 - **LablabAi:** For their invaluable workshops and organizing the hackathon that sparked the creation of ReconcilAi.
