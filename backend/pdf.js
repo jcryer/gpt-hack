@@ -1,11 +1,4 @@
-import * as tesseract from "node-tesseract-ocr";
-
-const config = {
-  lang: "eng",
-  oem: 1,
-  psm: 3,
-}
-
+import { createWorker } from 'tesseract.js';
 import pdftopic from "pdftopic";
 
 async function pdfToImageBuffers(fileBuffer) {
@@ -13,13 +6,15 @@ async function pdfToImageBuffers(fileBuffer) {
 }
 
 async function pdfToText(fileBuffer) {
+  const worker = await createWorker('eng');
   const images = await pdfToImageBuffers(fileBuffer);
   let out = "";
 
   for (const image of images) {
-    const text = await tesseract.recognize(image, config);
-    out += `${text} \r\n`;
+    const ret = await worker.recognize(image);
+    out += `${ret.data.text} \r\n`;
   }
+  await worker.terminate();
   return out;
 }
 

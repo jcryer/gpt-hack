@@ -66,7 +66,7 @@ fastify.post('/upload', async function (req, res) {
 
   for await (const part of datas) { // iterate the async generator
     req.log.info('storing %s', part.filename);
-    if (part.filename.includes("nvoice") || part.filename.includes("invoicesFiles")) {
+    if (part.filename.includes("pdf") || part.filename.includes("invoicesFiles")) {
       invoiceProms.push(processUploadedInvoice(part));
     } else if (part.filename.includes("csv") || part.filename.includes("statementsFiles")) {
       bank = processUploadedBankStat(part);
