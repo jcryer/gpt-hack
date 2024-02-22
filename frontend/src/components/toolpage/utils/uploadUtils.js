@@ -1,6 +1,7 @@
 // uploadUtils.js
 
 const uploadFiles = async ({invoicesFiles, statementsFiles}, text) => {
+  console.log("here");
   const formData = new FormData();
 
   // Append invoices files to the formData with keys indicating their origin and index
@@ -10,7 +11,7 @@ const uploadFiles = async ({invoicesFiles, statementsFiles}, text) => {
   });
 
   // Append statements files to the formData with keys indicating their origin and index
-  statementsFiles.forEach((file, index) => {
+  statementsFiles?.forEach((file, index) => {
     console.log(`Appending statement file: ${file.name}`);
     formData.append(`statementsFiles[${index}]`, file); // Key format: statementsFiles[index]
   });
@@ -24,7 +25,7 @@ const uploadFiles = async ({invoicesFiles, statementsFiles}, text) => {
   }
 
   try {
-    const response = await fetch('/reconcile', { //route to
+    const response = await fetch('http://localhost:3000/reconcile', { //route to
       method: 'POST',
   
       body: formData,

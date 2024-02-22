@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import './LoggedIn.css';
 import TopLeft from './LoggedInComps/TopLeft';
 import TopRight from './LoggedInComps/TopRight';
-import BottomLeft from './LoggedInComps/BottomLeft';
-import BottomRight from './LoggedInComps/BottomRight';
-import { FileDataProvider } from './context/IncomingContext';
+import Bottom from './LoggedInComps/Bottom';
 import { SettingsProvider } from './context/SettingsContext';
-import { OutgoingProvider } from './context/OutgoingContext';
 
 const LoggedIn = ({ onLogout }) => {
   const [username, setUsername] = useState('');
 
+  const initialPlaceholderData = [
+    { date: '2024-02-01', description: 'Item 1', total: '$100' },
+    { date: '2024-02-02', description: 'Item 2', total: '$200' },
+    { date: '2024-02-03', description: 'Item 3', total: '$300' },
+  ];
+  
   return (
-    <FileDataProvider>
-      <OutgoingProvider>
       <SettingsProvider>
         
     <div className="container">
@@ -24,15 +25,13 @@ const LoggedIn = ({ onLogout }) => {
       <TopRight />
     </div>
     <div className='contentWrapper quarter'> {/* Add 'quarter' class here */}
-      <BottomLeft />
+      <Bottom title="Incoming" data={initialPlaceholderData}/>
     </div>
     <div className='contentWrapper quarter'> {/* Add 'quarter' class here */}
-      <BottomRight />
+      <Bottom title="Outgoing"/>
     </div>
   </div>
   </SettingsProvider>
-  </OutgoingProvider>
-  </FileDataProvider>
   );
 };
 

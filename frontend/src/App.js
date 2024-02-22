@@ -13,7 +13,6 @@ const App = () => {
         return <ToolPage />;
       case 'About':
         return <About />;
-      
       default:
         return <ToolPage />;
     }
