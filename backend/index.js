@@ -2,6 +2,8 @@ import Fastify from 'fastify';
 import * as path from 'path';
 import * as st from '@fastify/static';
 import multipart from '@fastify/multipart';
+import cors from '@fastify/cors'
+
 import { fileURLToPath } from 'url';
 import fs from "fs";
 import { processBankStatement, processInvoice, matchInvoicesAndStatements, reconcilai } from './openai.js';
@@ -25,6 +27,7 @@ fastify.register(st, {
   prefix: '/'
 });
 fastify.register(multipart);
+fastify.register(cors);
 
 // Reads in a local CSV file of bank statement, chunks it, sends each chunk to GPT in parallel, collates result
 // and returns standardised JSON representation of bank statement.
