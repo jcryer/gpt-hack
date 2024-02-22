@@ -16,7 +16,7 @@ async function createUser(name) {
 }
 
 async function createReceipt(gptObj, userId, fileName) {
-  const res = await db.run("INSERT INTO receipts (user_id, total_amount, description, to_from, category, date, file_name) " + 
+  const res = await db.run("INSERT INTO receipts (user_id, total_amount, description, to_from, category, date, file_name) " +
                            "VALUES (?, ?, ?, ?, ?, ?, ?)", [userId, gptObj['totalAmount'], gptObj['description'], gptObj['toFrom'], gptObj['category'], new Date(gptObj['date']).toISOString(), fileName]);
   return res.lastID;
 }
@@ -24,7 +24,7 @@ async function createReceipt(gptObj, userId, fileName) {
 async function createBankStatement(gptObj, userId) {
   const bank = await db.run("INSERT INTO bank_statements (user_id) VALUES (?)", [userId]);
   for (const bankItem of gptObj) {
-    await db.run("INSERT INTO bank_statement_rows (total_amount, description, to_from, category, date, bank_statement_id)" + 
+    await db.run("INSERT INTO bank_statement_rows (total_amount, description, to_from, category, date, bank_statement_id)" +
       " VALUES (?, ?, ?, ?, ?, ?)", [bankItem['totalAmount'], bankItem['description'], bankItem['toFrom'], bankItem['category'], new Date(bankItem['date']).toISOString(), bank.lastID]);
   }
   return bank.lastID;
