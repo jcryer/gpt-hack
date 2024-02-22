@@ -1,15 +1,12 @@
 // tableUtils.js
 
-export const createTableRows = (data, handleCellClick, columns, fillRows = 100) => {
+export const createTableRows = (data, handleRowClick, columns, fillRows = 100) => {
   const rows = data.map((item, index) => {
-    // Determine the class name based on the Y/N column
-    const rowClassName = item.yn === 'Y' ? 'yes-row' : item.yn === 'N' ? 'no-row' : '';
 
     return (
-      <tr key={item.id || index} className={rowClassName}>
+      <tr key={item.id || index} onClick={() => handleRowClick(item)}>
         {columns.map(column => (
-          // Pass both item[column] and column name to handleCellClick
-          <td key={column} onClick={() => handleCellClick(item[column], column)}>
+          <td key={column}>
             {item[column]}
           </td>
         ))}
@@ -21,23 +18,11 @@ export const createTableRows = (data, handleCellClick, columns, fillRows = 100) 
   for (let i = data.length; i < fillRows; i++) {
     rows.push(
       <tr key={`empty-${i}`}>
-        {Array(columns.length).fill(<td>&nbsp;</td>)}
+        {columns.map((x, i) => (<td key={`td-${i}`}>&nbsp;</td>))}
       </tr>
     );
   }
 
   return rows;
 };
-  
-  export const parseTSV = (tsv) => {
-    const lines = tsv.split('\n');
-    const headers = lines[0].split('\t');
-    return lines.slice(1).map((line, index) => {
-      const values = line.split('\t');
-      return headers.reduce((obj, header, idx) => {
-        obj[header] = values[idx];
-        return obj;
-      }, { id: index + 1 }); // Adding an 'id' field
-    });
-  };
   

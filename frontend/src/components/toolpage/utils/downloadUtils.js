@@ -1,22 +1,18 @@
 // downloadUtils.js
 
-// Convert data array to TSV format
-export const convertToTSV = (data) => {
-    // Extract headers
-    const headers = Object.keys(data[0]);
-  
-    // Map each row to a TSV string
-    const rows = data.map(row => 
-      headers.map(header => row[header]).join('\t')
-    );
-  
-    return [headers.join('\t'), ...rows].join('\n');
+// Convert data array to CSV format
+export const convertToCsv = (data) => {
+    const array = [Object.keys(data[0])].concat(data);
+
+    return array.map(it => {
+      return Object.values(it).toString()
+    }).join('\n');
   };
   
-  // Trigger download of TSV file
-  export const downloadTSV = (data, filename = 'data.tsv') => {
-    const tsvString = convertToTSV(data);
-    const blob = new Blob([tsvString], { type: 'text/tab-separated-values' });
+  // Trigger download of CSV file
+  export const downloadCsv = (data, filename = 'data.csv') => {
+    const csvString = convertToCsv(data);
+    const blob = new Blob([csvString], { type: 'text/csv' });
   
     // Create a link and trigger the download
     const link = document.createElement('a');
