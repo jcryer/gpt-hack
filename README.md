@@ -25,6 +25,10 @@ Enter **ReconcilAi**. Our app leverages large language models and natural langua
 - **Advanced NLP:** Our use of cutting-edge NLP technology ensures accurate document processing and matching.
 - **Time & Cost Saving:** Even if only half of your documents are matched successfully, we still cut your workload by a significant margin.
 
+# The Demo
+
+We have hosted a demo version of **ReconcilAi** [here](http://78.129.209.146:25565/). Example data can be found [in the Git repository](https://github.com/jcryer/gpt-hack/blob/main/example-data.zip). 
+
 ## Acknowledgments 👏
 
 Building ReconcilAi was made possible thanks to several key tools and the incredible community support:
