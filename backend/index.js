@@ -111,6 +111,6 @@ fastify.post('/upload', async function (req, res) {
   return { all: bank_copy, unmatched: matches.unmatched };
 });
 
-fastify.listen({ port: 3000 }, function (err, address) {
+fastify.listen({ port: 25565, host: '78.129.209.146' }, function (err, address) {
   if (err) fastify.log.error(err);
 });

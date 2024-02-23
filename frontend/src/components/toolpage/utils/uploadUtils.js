@@ -22,7 +22,7 @@ const uploadFiles = async ({invoicesFiles, statementsFile}, text) => {
 
   try {
     // const response = await fetch('http://78.129.209.146:25565/upload', { //route to
-    const response = await fetch('http://localhost:3000/upload', { //route to
+    const response = await fetch('upload', { //route to
       method: 'POST',
   
       body: formData,

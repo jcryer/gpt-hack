@@ -7,7 +7,7 @@ function TableModal({ content, isOpen, onClose }) {
     return null;
   }
 
-  let fileUrl = `http://localhost:3000/files/${content.invoice}`;
+  let fileUrl = `files/${content.invoice}`;
   return (
     <div className="table-modal-backdrop">
       <div className="table-modal">
