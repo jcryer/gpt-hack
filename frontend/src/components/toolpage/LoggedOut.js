@@ -22,7 +22,8 @@ const LoggedOut = ({ onLogin }) => {
       </div>
       <div className="formSide">
         <div className="formContainer">
-          <LogForm onLogin={handleLoginSuccess}/>
+          <button type="submit" className="submitButton" onClick={() => onLogin(true)}>Press to Begin</button>
+          {/* <LogForm onLogin={handleLoginSuccess}/> */}
         </div>
       </div>
     </div>

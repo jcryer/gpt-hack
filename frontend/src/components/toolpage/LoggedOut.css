@@ -22,13 +22,7 @@
 
 .formContainer {
   width: 50%; /* Use 100% of the formSide width */
-  max-width: 500px; /* Limiting the form width for larger screens */
-  margin: 0 auto; /* Centering in case flexbox fails */
-  
-  /* Using transform for an alternative centering method */
-  position: relative;
-  left: 25%;
-  transform: translateX(-50%);
+  display: flex;
 }
 
 

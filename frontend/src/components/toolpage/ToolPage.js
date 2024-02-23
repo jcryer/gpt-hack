@@ -4,7 +4,7 @@ import LoggedIn from './LoggedIn';
 import LoggedOut from './LoggedOut';
 
 const ToolPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const handleLogin = (log) => {
     setIsLoggedIn(log);

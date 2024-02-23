@@ -27,6 +27,8 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    flex-grow: 1;
+    height: 4rem;
   }
   
   .submitButton:hover {
