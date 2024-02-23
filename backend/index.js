@@ -93,6 +93,7 @@ fastify.post('/upload', async function (req, res) {
   bank = await bank;
 
   let bank_copy = JSON.parse(JSON.stringify(bank));
+  console.log(bank_copy);
   let invoiceIds = [];
   let invoices = [];
   let invoiceNames = [];
