@@ -3,7 +3,7 @@ import './TopLeft.css'; // Make sure you create a corresponding CSS file
 import { uploadFiles } from '../utils/uploadUtils';
 import { useSettings } from '../context/SettingsContext';
 
-function TopLeft() {
+function TopLeft({ setData }) {
   const [activeTab, setActiveTab] = useState('Invoices');
 
   const [files, setFiles] = useState([]); // Files for Invoices
@@ -43,7 +43,8 @@ function TopLeft() {
 
       console.log(filesToUpload);
 
-      await uploadFiles(filesToUpload, settings);
+      const res = await uploadFiles(filesToUpload, settings);
+      setData(res);
       alert('Files have been successfully uploaded.');
     } catch (error) {
       console.error('An error occurred during file upload:', error);

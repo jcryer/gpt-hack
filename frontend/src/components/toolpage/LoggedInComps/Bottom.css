@@ -88,3 +88,13 @@
   .component3-table .no-row {
     background-color: rgba(255, 0, 0, 0.1); /* Light red tint */
   }
+
+  tr {
+    &.matched {
+      background-color: rgba(144, 238, 144, 0.461);
+    }
+
+    &.unmatched {
+      background-color: rgba(240, 128, 128, 0.577);
+    }
+  }

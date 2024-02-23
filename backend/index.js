@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import * as path from 'path';
-import * as st from '@fastify/static';
+import st from '@fastify/static';
 import multipart from '@fastify/multipart';
 import cors from '@fastify/cors'
 
@@ -22,12 +22,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
+fastify.register(cors);
+
+fastify.register(multipart);
+
 fastify.register(st, {
   root: path.join(__dirname, 'build'),
-  prefix: '/'
+  prefix: '/',
+  decorateReply: false
 });
-fastify.register(multipart);
-fastify.register(cors);
+
+fastify.register(st, {
+  root: path.join(__dirname, 'files'),
+  prefix: '/files/',
+  decorateReply: false
+});
+
+
 
 // Reads in a local CSV file of bank statement, chunks it, sends each chunk to GPT in parallel, collates result
 // and returns standardised JSON representation of bank statement.
@@ -71,7 +82,7 @@ fastify.post('/upload', async function (req, res) {
     req.log.info('storing %s', part.filename);
     if (part.filename.includes("pdf") || part.filename.includes("invoicesFiles")) {
       invoiceProms.push(processUploadedInvoice(part));
-    } else if (part.filename.includes("csv") || part.filename.includes("statementsFiles")) {
+    } else if (part.filename.includes("csv") || part.filename.includes("statementsFile")) {
       bank = processUploadedBankStat(part);
     } else {
       return { error: `well thats not good: ${part.filename}` };
@@ -81,11 +92,23 @@ fastify.post('/upload', async function (req, res) {
   invoiceProms = await Promise.all(invoiceProms);
   bank = await bank;
 
-  console.log(JSON.stringify(bank));
+  let bank_copy = JSON.parse(JSON.stringify(bank));
+  let invoiceIds = [];
+  let invoices = [];
+  let invoiceNames = [];
   for (let i = 0; i < invoiceProms.length; i++) {
-    console.log(JSON.stringify(invoiceProms[i]));
+    invoiceIds.push(invoiceProms[i].id);
+    invoices.push(invoiceProms[i].processed);
+    invoiceNames.push(invoiceProms[i].name);
   }
-  return matchInvoicesAndStatements(bank, invoiceProms);
+  const matches = await matchInvoicesAndStatements(bank, invoices, invoiceIds, invoiceNames);
+
+  matches.matches.forEach((m) => {
+    bank_copy[m.statementId].invoice = `inv_${m.invoiceId}.pdf`;
+    bank_copy[m.statementId].invoiceName = m.invoiceName;
+  });
+
+  return { all: bank_copy, unmatched: matches.unmatched };
 });
 
 fastify.listen({ port: 3000 }, function (err, address) {

@@ -27,12 +27,12 @@ async function processUploadedInvoice(part) {
   }*/
   const receiptId = await createReceipt(processed, 1, part.filename);
   await fs.promises.writeFile(`files/inv_${receiptId}.pdf`, buffer);
-  return processed;
+  return { processed: processed, id: receiptId, name: part.filename };
 }
 
 async function processUploadedBankStat(part) {
   const buffer = await streamToBuffer(part.file);
-  const processed = await processBankStatement(buffer);
+  const processed = await processBankStatement(buffer.toString());
   const bankId = await createBankStatement(processed, 1); // Eventually pass userId
   await fs.promises.writeFile(`files/bank_${bankId}.csv`, buffer);
   return processed;

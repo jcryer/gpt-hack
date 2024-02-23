@@ -45,7 +45,6 @@
   .left {
     flex-grow: 1;
     width: 40%;
-    border-right: 2px solid grey;
 
     .row {
       margin-bottom: 10px;
@@ -53,6 +52,8 @@
   }
 
   .right {
+    border-left: 2px solid grey;
+
     flex-grow: 1;
     width: 60%;
 

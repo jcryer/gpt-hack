@@ -1,4 +1,4 @@
-.component1 {
+.component2 {
     display: flex;
     flex-direction: column;
     padding: 5px;
@@ -9,8 +9,6 @@
     box-sizing: border-box;
     justify-content: space-between; /* This will space out the children */
     height: 100%;
-    max-height: 85px;
-    min-height:85px
   }
   
   .button-container {
@@ -56,6 +54,10 @@
     margin-bottom: 20px;
     height: 100%; /* Fill the available vertical space */
   }
+
+  .alerts-container {
+    overflow: scroll;
+  }
   
   
   .file-input {
@@ -96,6 +98,10 @@
     display: flex;
     justify-content: center; /* Centers the text input horizontally */
     align-items: center; /* Centers the text input vertically if the container has a specific height */
+    height: 60%;
+  }
+  #settings-input {
+    height: 100%;
   }
   
   .text-input {
@@ -106,6 +112,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     resize: vertical; /* Allows the user to resize the textarea vertically */
+    margin-bottom: 2.5rem;
   }
 
   /* Add this new hover effect for all buttons including the file label */

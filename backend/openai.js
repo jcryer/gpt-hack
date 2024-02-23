@@ -46,7 +46,7 @@ async function doBankStatementRequest(chunk) {
                 type: "number",
                 description: "A monetary amount, which can be positive or negative."
               },
-              description: "The total monetary amounts on the item. It can be + or -"
+              description: "The total monetary amount on the item. It can be + or -."
             },
             description: {
               type: "array",
@@ -137,7 +137,7 @@ async function processInvoice(data) {
           properties: {
             totalAmount: {
               type: "number",
-              description: "The total monetary amount charged on the invoice."
+              description: "The total monetary amount charged on the invoice. This must be in GBP."
             },
             description: {
               type: "string",
@@ -248,7 +248,7 @@ const normalizeAmount = (amount) => {
 
 
 
-async function matchInvoicesAndStatements(bankCallData = defaultBankCallData, receiptData = defaultReceiptData) {
+async function matchInvoicesAndStatements(bankCallData = defaultBankCallData, receiptData = defaultReceiptData, receiptIds, receiptNames) {
   // Step 1: Assign unique IDs and normalize amounts
   const amountOccurrences = new Map();
 
@@ -290,7 +290,7 @@ async function matchInvoicesAndStatements(bankCallData = defaultBankCallData, re
     if (uniqueAmountsInReceipts.get(invoice.normalizedAmount) === 1 && uniqueAmountsInBankCalls.get(invoice.normalizedAmount) === 1) {
       const matchIndex = bankCallData.findIndex(statement => statement.normalizedAmount === invoice.normalizedAmount);
       if (matchIndex !== -1) {
-        matches.push({ statementId: bankCallData[matchIndex].id, invoiceId: invoice.id, description: bankCallData[matchIndex].description });
+        matches.push({ statementId: bankCallData[matchIndex].id, invoiceId: receiptIds[invoice.id], invoiceName: receiptNames[invoice.id], description: bankCallData[matchIndex].description });
         bankCallData.splice(matchIndex, 1); // Remove matched item from bankCallData
         matchFound = true;
       }
@@ -308,10 +308,10 @@ async function matchInvoicesAndStatements(bankCallData = defaultBankCallData, re
       new Date(statement.date).getTime() === invoiceDate);
 
     if (matchIndex !== -1) {
-      matches.push({ statementId: bankCallData[matchIndex].id, invoiceId: invoice.id });
+      matches.push({ statementId: bankCallData[matchIndex].id, invoiceId: receiptIds[invoice.id], invoiceName: receiptNames[invoice.id] });
       // Do not immediately remove the matched item to allow for potential duplicates
     } else {
-      tempReceiptData.push(invoice); // Keep unmatched for further analysis or processing
+      tempReceiptData.push({...invoice, invoiceId: receiptIds[invoice.id], invoiceName: receiptNames[invoice.id] }); // Keep unmatched for further analysis or processing
     }
   });
 
@@ -319,8 +319,8 @@ async function matchInvoicesAndStatements(bankCallData = defaultBankCallData, re
   receiptData = tempReceiptData;
   // Return the results
   return {
-    matched: matches,
-    unmatched: unmatched
+    matches: matches,
+    unmatched: receiptData
   };
 }
 

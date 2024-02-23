@@ -7,7 +7,7 @@
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 20% 80%; /* Adjusted to specify 30% height for the top row and 70% for the bottom row */
   gap: 10px;
-  height: 96vh; /* Adjust based on your layout */
+  height:89vh; /* Adjust based on your layout */
 
 }
 

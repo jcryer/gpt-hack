@@ -14,7 +14,7 @@ function Bottom({ title, data=[] }) {
     setIsModalOpen(true);
   }
 
-  const columns = ['date', 'description', 'category', 'to_from', 'total', 'reconciled']; // Adjust columns as needed
+  const columns = ['date', 'description', 'category', 'toFrom', 'totalAmount', 'invoiceName']; // Adjust columns as needed
 
   const rowsToRender = createTableRows(data, handleRowClick, columns);
 
@@ -36,7 +36,7 @@ function Bottom({ title, data=[] }) {
               <th>Category</th>
               <th>To/From</th>
               <th>Total</th>
-              <th>Reconciled?</th>
+              <th>Invoice</th>
             </tr>
           </thead>
           <tfoot>

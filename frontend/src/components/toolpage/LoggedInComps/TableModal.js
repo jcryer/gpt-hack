@@ -7,18 +7,23 @@ function TableModal({ content, isOpen, onClose }) {
     return null;
   }
 
-  console.log(content);
+  let fileUrl = `http://localhost:3000/files/${content.invoice}`;
   return (
-    <div className="table-modal-backdrop" onClick={onClose}>
+    <div className="table-modal-backdrop">
       <div className="table-modal">
         <button className="table-modal-close" onClick={onClose}>×</button>
         <div className="table-modal-content">
-          <div className='left'>{Object.values(content).map((item) => (
-            <div className='row' key={item}>{item}</div>
-          ))}</div>
-          <div className='right'>
-            <PDFModal content="http://localhost:3000/pdf" />
+          <div className='left'>
+            <div className='row'><b>Total:</b> {content.totalAmount < 0 ? `-£${Math.abs(content.totalAmount).toFixed(2)}` : `£${content.totalAmount.toFixed(2)}`}</div>
+            <div className='row'><b>Date:</b> {content.date}</div>
+            <div className='row'><b>Description:</b> {content.description}</div>
+            <div className='row'><b>Category:</b> {content.category}</div>
+            <div className='row'><b>To/From:</b> {content.toFrom}</div>
+            {content.invoice ? (<div className='row'><b>File:</b> <a href={fileUrl}>Download here</a></div>) : null}
           </div>
+          {content.invoice ? (<div className='right'>
+            <PDFModal content={fileUrl} />
+          </div>) : null}
         </div>
       </div>
     </div>

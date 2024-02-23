@@ -4,10 +4,10 @@ export const createTableRows = (data, handleRowClick, columns, fillRows = 100) =
   const rows = data.map((item, index) => {
 
     return (
-      <tr key={item.id || index} onClick={() => handleRowClick(item)}>
+      <tr className={item.invoice ? 'matched' : 'unmatched'} key={item.id || index} onClick={() => handleRowClick(item)}>
         {columns.map(column => (
           <td key={column}>
-            {item[column]}
+            {column === 'totalAmount' ? item[column].toFixed(2) : item[column]}
           </td>
         ))}
       </tr>

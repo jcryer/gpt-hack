@@ -1,23 +1,19 @@
 // uploadUtils.js
 
-const uploadFiles = async ({invoicesFiles, statementsFiles}, text) => {
+const uploadFiles = async ({invoicesFiles, statementsFile}, text) => {
   console.log("here");
   const formData = new FormData();
 
   // Append invoices files to the formData with keys indicating their origin and index
   invoicesFiles.forEach((file, index) => {
     console.log(`Appending invoice file: ${file.name}`);
-    formData.append(`invoicesFiles[${index}]`, file); // Key format: invoicesFiles[index]
+    formData.append(``, file); 
   });
 
-  // Append statements files to the formData with keys indicating their origin and index
-  statementsFiles?.forEach((file, index) => {
-    console.log(`Appending statement file: ${file.name}`);
-    formData.append(`statementsFiles[${index}]`, file); // Key format: statementsFiles[index]
-  });
+  formData.append(``, statementsFile); 
 
-  // Append text to the formData
-  formData.append('text', text);
+  // // Append text to the formData
+  // formData.append('text', text);
 
   // Logging formData contents (for debugging purposes)
   for (var pair of formData.entries()) {
@@ -25,15 +21,18 @@ const uploadFiles = async ({invoicesFiles, statementsFiles}, text) => {
   }
 
   try {
-    const response = await fetch('http://localhost:3000/reconcile', { //route to
+    // const response = await fetch('http://78.129.209.146:25565/upload', { //route to
+    const response = await fetch('http://localhost:3000/upload', { //route to
       method: 'POST',
   
       body: formData,
     });
 
     if (response.ok) {
+      let res = await response.json();
+      console.log(res);
       // Server response is OK, parse and return the JSON response
-      return await response.json();
+      return res;
     } else {
       // Server responded with an error status, throw an error
       throw new Error('Upload failed');
