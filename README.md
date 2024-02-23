@@ -27,7 +27,7 @@ Enter **ReconcilAi**. Our app leverages large language models and natural langua
 
 # The Demo
 
-We have hosted a demo version of **ReconcilAi** [here](http://78.129.209.146:25565/). Example data can be found [in the Git repository](https://github.com/jcryer/gpt-hack/blob/main/example-data.zip). 
+We have hosted a demo version of **ReconcilAi** [here](http://reconcilai.telekinetix.com/). Example data can be found [in the Git repository](https://github.com/jcryer/gpt-hack/blob/main/example-data.zip). 
 
 ## Acknowledgments 👏
 
